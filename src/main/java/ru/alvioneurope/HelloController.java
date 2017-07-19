@@ -14,6 +14,12 @@ public class HelloController {
 	@Autowired
 	private CallTrackingService callTrackingService;
 
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public  @ResponseBody  String printRoot() {
+		return "Root";
+	}
+
+
 	@RequestMapping(value = "/hello", method = RequestMethod.GET)
 	public  @ResponseBody  String printWelcome() {
 		return "hello";

@@ -37,7 +37,10 @@ public class CallTrackingService {
     @Autowired
     @Qualifier ("crmAmqpAdmin")
     private RabbitAdmin rabbitAdmin;
+    @Autowired
+    @Qualifier ("replyQueue")
     private Queue replyQueue;
+
     private RabbitTemplate rabbitTemplate;
     private SimpleMessageListenerContainer replyListener;
 
@@ -50,8 +53,6 @@ public class CallTrackingService {
 
     @PostConstruct
     public void init() {
-
-        this.replyQueue = new Queue("mango.itg.pbx.amqp.call-tracking.reply", false);
 
         this.rabbitTemplate = new RabbitTemplate(this.connectionFactory);
         this.rabbitTemplate.setQueue(this.replyQueue.getName());
@@ -69,7 +70,7 @@ public class CallTrackingService {
             @Override
             public void onMessage(Message message)
             {
-                LOGGER.debug("DCT INFO MESSAGE " + message);
+                LOGGER.info("DCT INFO MESSAGE " + message);
             }
         });
     }
@@ -81,7 +82,7 @@ public class CallTrackingService {
         try {
             StringBuilder sb = new StringBuilder(128);
             sb.append("[\"").append(diversion).append("\"]");
-            LOGGER.debug("DCT getUserInfoByDynamicNumber message: " + sb.toString());
+            LOGGER.info("DCT getUserInfoByDynamicNumber message: " + sb.toString());
             MessageProperties mp = new MessageProperties();
             mp.setDeliveryMode(MessageDeliveryMode.NON_PERSISTENT);
             mp.setContentType("application/json");
@@ -96,11 +97,11 @@ public class CallTrackingService {
                     msg, new CorrelationData(correlationId));
             DCTInfo info = null;
             if (reply != null) {
-                LOGGER.debug("DCT getUserInfoByDynamicNumber reply: " + reply);
+                LOGGER.info("DCT getUserInfoByDynamicNumber reply: " + reply);
                 if(reply.getBody() != null) {
                     String body = new String(reply.getBody(), "UTF-8");
                     if(StringUtils.hasText(body)) {
-                        LOGGER.debug("DCT getUserInfoByDynamicNumber reply body: " + body);
+                        LOGGER.info("DCT getUserInfoByDynamicNumber reply body: " + body);
                         JsonParser parser = new JsonParser();
                         JsonElement json = parser.parse(body);
                         if(json instanceof JsonObject) {
@@ -147,14 +148,14 @@ public class CallTrackingService {
                                 info.setCurrentPage(url.getAsString());
                             }
                         } else {
-                            LOGGER.debug("DCT getUserInfoByDynamicNumber - unknown diversity number");
+                            LOGGER.info("DCT getUserInfoByDynamicNumber - unknown diversity number");
                         }
                     } else {
-                        LOGGER.debug("DCT getUserInfoByDynamicNumber - empty response");
+                        LOGGER.info("DCT getUserInfoByDynamicNumber - empty response");
                     }
                 }
             } else {
-                LOGGER.debug("DCT getUserInfoByDynamicNumber reply: NULL");
+                LOGGER.info("DCT getUserInfoByDynamicNumber reply: NULL");
             }
             return Optional.ofNullable(info);
         } catch (UnsupportedEncodingException e) {
