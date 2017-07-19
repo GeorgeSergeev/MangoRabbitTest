@@ -3,7 +3,7 @@ package ru.alvioneurope;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -28,10 +28,22 @@ public class Receiver {
 
     protected static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Receiver.class);
     private final static String QUEUE_NAME = "mango.itg.pbx.amqp.call-tracking.exchange";
+    final static String EXCHANGE_NAME ="events.vpbx.history";
 /*
     @RabbitListener(queues = QUEUE_NAME)
     public void onMessage(String message) {
         LOGGER.info("Yehoo!!! Accepted : " + message);
     }
 */
+
+    @RabbitListener(
+            bindings = @QueueBinding(
+                    value = @Queue(value = QUEUE_NAME, durable = "false"),
+                    exchange = @Exchange(value = EXCHANGE_NAME, type = "fanout", durable = "true"),
+                    key = "context.srv")
+    )
+    public void processOrder(Message message) {
+        String messageBody= new String(message.getBody());
+        System.out.println("Received : "+messageBody);
+    }
 }

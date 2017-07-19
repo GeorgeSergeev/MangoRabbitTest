@@ -54,6 +54,7 @@ public class RabbitConfiguration {
         return new Queue(replyQueueName,false);
     }
 
+    /*
 
     @Bean (name = "eventQueue")
     public Queue eventQueue() {
@@ -93,12 +94,12 @@ public class RabbitConfiguration {
         container.setMessageListener(new MessageListenerAdapter(new MessageHandler()));
         return container;
     }
-/*
+*/
     @Bean(name="rabbitListenerContainerFactory")
     public SimpleRabbitListenerContainerFactory listenerFactory(){
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory());
         return factory;
     }
-*/
+
 }
