@@ -44,13 +44,7 @@ public class CallTrackingService {
     private RabbitTemplate rabbitTemplate;
     private SimpleMessageListenerContainer replyListener;
 
-    //@Autowired
-    //private Queue replyQueue;
-    //@Autowired
-    //private RabbitTemplate rabbitTemplate;
-    // private SimpleMessageListenerContainer replyListener;
-
-
+  
     @PostConstruct
     public void init() {
 

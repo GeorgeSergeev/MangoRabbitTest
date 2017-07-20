@@ -29,15 +29,17 @@ public class RabbitConfiguration {
     final static String eventQueueName = "mango.itg.pbx.amqp.call-tracking.exchange";
     final static String exchangeName ="events.call-tracking-service.calls";
     final static String routingKey ="dynamic";
+    final static String hostName = "t-rabbit-bus.by.mgo.su";
 
     @Bean (name = "crmConnectionFactory")
     public ConnectionFactory connectionFactory() {
-        logger.info("Connect to rabbit-bus-prod.as.ru.mgo.su");
+        logger.info("Connect to "+hostName);
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setHost("rabbit-bus-prod.as.ru.mgo.su");
+        connectionFactory.setHost(hostName);
         connectionFactory.setPort(5672);
-        connectionFactory.setUsername("guest");
-        connectionFactory.setPassword("guest");
+        connectionFactory.setVirtualHost("DEV");
+        connectionFactory.setUsername("g.sergeev");
+        connectionFactory.setPassword("UQI78d4tudneqEymcaWj");
         return connectionFactory;
     }
 

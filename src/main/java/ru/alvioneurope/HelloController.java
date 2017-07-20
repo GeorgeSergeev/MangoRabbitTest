@@ -28,10 +28,10 @@ public class HelloController {
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public @ResponseBody String printInfo() {
 		String res="Result :";
-		Optional<DCTInfo> info0 = callTrackingService.getDCTUserInfoByDynamicNumber("7007374958784576");
-		res+="\n{74958784576:"+info0.toString()+"}"+"\n";
-		Optional<DCTInfo> info1 = callTrackingService.getDCTUserInfoByDynamicNumber("74958784576");
-		res+="\n{74958784576:"+info1.toString()+"}"+"\n";
+		Optional<DCTInfo> info0 = callTrackingService.getDCTUserInfoByDynamicNumber("7007374958784554");
+		res+="\n{7007374958784554:"+info0.toString()+"}"+"\n";
+		Optional<DCTInfo> info1 = callTrackingService.getDCTUserInfoByDynamicNumber("74958784554");
+		res+="\n{749587845546:"+info1.toString()+"}"+"\n";
 		Optional<DCTInfo> info3 = callTrackingService.getDCTUserInfoByDynamicNumber("74994506632");
 		res+="\n{74994904112:"+info3.toString()+"}"+"\n";
 
